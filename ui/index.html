@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>sfmc-teste-custom-activity-v001 Configuration</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap');
+    
+    :root {
+      --bg: #0f172a;
+      --fg: #f8fafc;
+      --primary: #60a5fa;
+      --primary-fg: #0f172a;
+      --secondary: #1e293b;
+      --border: #334155;
+      --accent: #60a5fa;
+      --muted: #94a3b8;
+      --radius-container: 12px;
+      --radius-input: 8px;
+      --radius-button: 6px;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      padding: 24px;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--fg);
+    }
+    
+    .description {
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--fg);
+    }
+    
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-input);
+      font-size: 14px;
+      background: var(--bg);
+      color: var(--fg);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px #60a5fa20;
+    }
+    
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 24px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      color: var(--fg);
+    }
+    
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 24px 0;
+    }
+    
+    .info-box {
+      background: #60a5fa15;
+      border: 1px solid #60a5fa40;
+      border-radius: var(--radius-input);
+      padding: 12px 16px;
+      color: var(--primary);
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .checkbox-group input {
+      width: auto;
+    }
+    
+    .checkbox-group label {
+      margin-bottom: 0;
+    }
+    
+    .toggle-group {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 24px;
+    }
+    
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--border);
+      transition: 0.3s;
+      border-radius: 24px;
+    }
+    
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--bg);
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+    
+    .toggle input:checked + .toggle-slider {
+      background-color: var(--primary);
+    }
+    
+    .toggle input:checked + .toggle-slider:before {
+      transform: translateX(24px);
+    }
+    
+    /* Button styles removed - Salesforce provides native wizard navigation buttons */
+    
+    
+    .required {
+      color: #ef4444;
+    }
+    
+    .help-text {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    
+    .expression-field {
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+    }
+    
+    .radio-group .radio-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-weight: normal;
+    }
+    
+    .radio-option input {
+      width: auto;
+      accent-color: var(--primary);
+    }
+    
+    .checkbox-group input {
+      accent-color: var(--primary);
+    }
+    
+    .field-loading {
+      position: relative;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    
+    .field-loading::after {
+      content: '';
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: translateY(-50%) rotate(360deg); }
+    }
+    
+    [data-conditional] {
+      transition: opacity 0.2s, max-height 0.3s;
+    }
+    
+    .field-hidden {
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+    }
+    
+    /* Variable insertion styles - inline mode */
+    .variable-insert-container {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    
+    .variable-select {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-input);
+      font-size: 13px;
+      background: var(--bg);
+      color: var(--fg);
+      cursor: pointer;
+    }
+    
+    .variable-select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px #60a5fa20;
+    }
+    
+    .btn-insert-variable {
+      padding: 8px 16px;
+      background: var(--primary);
+      color: var(--primary-fg);
+      border: none;
+      border-radius: var(--radius-button);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, filter 0.2s;
+      white-space: nowrap;
+    }
+    
+    .btn-insert-variable:hover {
+      filter: brightness(0.9);
+    }
+    
+    .btn-insert-variable:active {
+      filter: brightness(0.8);
+    }
+    
+    /* Variable Panel Sidebar Styles */
+    .main-layout {
+      display: flex;
+      gap: 20px;
+      min-height: calc(100vh - 100px);
+    }
+    
+    .main-layout.panel-left {
+      flex-direction: row;
+    }
+    
+    .main-layout.panel-right {
+      flex-direction: row-reverse;
+    }
+    
+    .variable-panel {
+      width: 220px;
+      flex-shrink: 0;
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-container);
+      padding: 16px;
+      height: fit-content;
+      position: sticky;
+      top: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    .variable-panel-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .variable-search {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-input);
+      font-size: 13px;
+      margin-bottom: 12px;
+      background: var(--bg);
+      color: var(--fg);
+    }
+    
+    .variable-search:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    
+    .variable-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .variable-dropdown {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-input);
+      font-size: 13px;
+      background: var(--bg);
+      cursor: pointer;
+      color: var(--fg);
+    }
+    
+    .variable-dropdown:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px #60a5fa25;
+    }
+    
+    .variable-dropdown option {
+      padding: 8px;
+    }
+    
+    /* Button removed - direct insertion on select */
+    
+    .variable-empty {
+      padding: 16px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    
+    .main-content {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .variable-target:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px #60a5fa25;
+    }
+    
+    .variable-target.active-target {
+      border-color: var(--primary);
+      background: var(--bg);
+    }
+    
+    /* Element Selector Styles */
+    .element-selector-group {
+      position: relative;
+    }
+    
+    .element-type-selector {
+      font-weight: 500;
+    }
+    
+    .element-config-container {
+      margin-top: 16px;
+    }
+    
+    .element-config-form {
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-container);
+      padding: 16px;
+      animation: slideIn 0.3s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .element-config-form .config-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .element-config-form .config-header h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--fg);
+      margin: 0;
+    }
+    
+    .element-config-form .config-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .element-config-form .config-section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 12px;
+      margin-bottom: 4px;
+    }
+    
+    .element-config-form .config-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .element-config-form .config-field label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--fg);
+      margin-bottom: 2px;
+    }
+    
+    .element-config-form .config-field input,
+    .element-config-form .config-field textarea,
+    .element-config-form .config-field select {
+      font-size: 13px;
+      padding: 8px 10px;
+    }
+    
+    .element-config-form .config-colors-row {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .element-config-form .color-field {
+      flex: 1;
+    }
+    
+    .element-config-form .color-field input[type="color"] {
+      width: 100%;
+      height: 36px;
+      padding: 2px;
+      cursor: pointer;
+    }
+    
+    /* CTA Buttons Styling */
+    .cta-buttons-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .cta-button-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-input);
+      padding: 12px;
+    }
+    
+    .btn-add-cta,
+    .btn-add-slide,
+    .btn-add-timeline {
+      margin-top: 8px;
+      padding: 8px 12px;
+      background: transparent;
+      color: var(--primary);
+      border: 1px dashed var(--primary);
+      border-radius: var(--radius-button);
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .btn-add-cta:hover,
+    .btn-add-slide:hover,
+    .btn-add-timeline:hover {
+      background: #60a5fa10;
+    }
+    
+    /* Slides Container */
+    .slides-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .slide-item,
+    .timeline-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-input);
+      padding: 12px;
+    }
+    
+    .slide-header {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+  
+    
+  </style>
+</head>
+<body>
+  <div class="main-layout panel-right">
+    
+    <!-- Variable Panel Sidebar -->
+    <div class="variable-panel" id="variablePanel">
+      <div class="variable-panel-title">Variáveis Disponíveis</div>
+      <div class="variable-list" id="variableList">
+        <select class="variable-dropdown" id="variableDropdown">
+          <option value="">Selecione uma variável...</option>
+        </select>
+      </div>
+    </div>
+    
+    
+    <div class="main-content">
+      <div class="container">
+        <h1>sfmc-teste-custom-activity-v001</h1>
+        <p class="description">Configure your activity settings below.</p>
+        <form id="configForm">
+      <div class="form-group">
+        <label for="647c8697-703d-4c2b-a970-df6e71fbb529">Text Input</label>
+        <input type="text" 
+               id="647c8697-703d-4c2b-a970-df6e71fbb529" 
+               name="647c8697-703d-4c2b-a970-df6e71fbb529"
+               class=""
+               placeholder=""
+               
+               >
+      </div>
+
+      <div class="form-group">
+        <label for="9e3871e9-afc1-4232-98e2-29477ff2610e">Text Area</label>
+        <textarea id="9e3871e9-afc1-4232-98e2-29477ff2610e" 
+                  name="9e3871e9-afc1-4232-98e2-29477ff2610e"
+                  class="  variable-target"
+                  placeholder=""
+                  ></textarea>
+      </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Required libraries for SFMC Custom Activity -->
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/postmonger.js"></script>
+  <script src="customActivity.js"></script>
+  
+  <!-- Fallback initialization if scripts fail to load -->
+  <script>
+    window.onerror = function(msg, url, line) {
+      console.error('[CA Error]', msg, 'at', url, ':', line);
+      return false;
+    };
+    
+    // Debug: Log when all scripts are loaded
+    window.addEventListener('load', function() {
+      console.log('[CA] Window load complete');
+      console.log('[CA] jQuery available:', typeof jQuery !== 'undefined');
+      console.log('[CA] Postmonger available:', typeof Postmonger !== 'undefined');
+    });
+  </script>
+</body>
+</html>
